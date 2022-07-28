@@ -1,9 +1,7 @@
 import cv2
-import numpy as np
-import json
 import cv2 as cv
 from transform import four_point_transform
-import matplotlib.pyplot as plt
+
 def TransContour(image,contours,number):
     ans_block = []
     for i in range(number):
@@ -85,17 +83,21 @@ def IDJson(id_list):
     Id = ""
     checker=0
     for idx, item in enumerate(id_list):
+
         temp_imgGray = cv.GaussianBlur(item, (9, 9), 7)
         ret, threshold2 = cv.threshold(temp_imgGray, 190, 300, cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
         if value < 650:
             for i in range(9,0,-1):
-                if (idx+1) % 10 == i:
-                    Id = Id+str(i-1)
+                if (idx+1)%10==i:
+                    Id = Id + str(i-1)
                     checker += 1
         if (idx + 1) % 10 == 0:
+            if value <650:
+                Id = Id + str(9)
+                checker+=1
             if checker > 1:
-                Id = ""
+                Id[len(Id)-1] = "X"
                 break
             checker = 0
     return Id

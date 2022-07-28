@@ -1,8 +1,8 @@
 import cv2
-import cv2 as cv
+
 from transform import detectPts
 import imgProcess as pros
-from flask import jsonify
+
 
 def GetPoint(img):
     image_read = cv2.imread("test.jpg")
