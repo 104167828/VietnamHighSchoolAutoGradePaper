@@ -48,7 +48,9 @@ def ExportJSON(ans_list):
         temp_imgGray = cv.GaussianBlur(item,(9,9),7)
         ret, threshold2 = cv.threshold(temp_imgGray,190,300,cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
-        if value < 650:
+        print(value)
+
+        if value < 800:
             if (idx+1)%4 == 1:
                 tempAns= "A"
                 checker += 1
@@ -61,15 +63,18 @@ def ExportJSON(ans_list):
             if (idx+1)%4 == 0:
                 tempAns= "D"
                 checker += 1
+
         if (idx+1)%4==0:
             if checker ==0:
                 tempAns="O"
             elif checker >1:
                 tempAns = "X"
+
             AnsDict[counter] = tempAns
             tempAns=""
             counter += 1
             checker = 0
+
     return AnsDict
 def IDListProcess(id_block,col_num):
     id_list = []
@@ -85,13 +90,11 @@ def IDJson(id_list):
     Id = ""
     checker=0
     for idx, item in enumerate(id_list):
-
         temp_imgGray = cv.GaussianBlur(item, (9, 9), 7)
         ret, threshold2 = cv.threshold(temp_imgGray, 190, 300, cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
         print(value)
-        if value < 650:
-            print(idx+1)
+        if value < 700:
             for i in range(9,0,-1):
                 if (idx+1)%10==i:
                     if checker == 0:
@@ -108,6 +111,6 @@ def IDJson(id_list):
             if checker == 0:
                 Id = Id + "Y"
             checker = 0
-            print("---------------------")
+            print("-----------------------------")
     return Id
 
