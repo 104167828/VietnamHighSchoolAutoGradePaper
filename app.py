@@ -1,7 +1,7 @@
 from main import GetPoint, GetID
 from flask import Flask, request, jsonify
 import base64
-
+import json
 from io import BytesIO
 from PIL import Image
 import cv2
@@ -16,7 +16,12 @@ def hello():
 @app.route('/check/', methods=['GET', 'POST'])
 def GetURL(methods = ['GET','POST']):
     try:
-        im = Image.open(BytesIO(base64.b64decode(request.data)))
+        base64_modify = ""
+        json_income = request.data
+        json_modify = json.loads(json_income)
+        for json_element in json_modify['Base64']:
+            base64_modify = json_element['base64']
+        im = Image.open(BytesIO(base64.b64decode(base64_modify)))
         im.save("test.jpg")
         AnsJSON = GetPoint("test.jpg")
         IdJson = GetID("test.jpg")
