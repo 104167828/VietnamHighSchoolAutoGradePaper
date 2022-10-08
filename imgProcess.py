@@ -16,7 +16,6 @@ def AnsBoxProcess(ans_block):
             (h, w) = block.shape
             temp_h = h//6
             ans_box.append(block[temp_h*i:temp_h*(i+1),0:w])
-
     return ans_box
 def AnsCellProcess(ans_box):
     ans_cell = []
@@ -48,8 +47,6 @@ def ExportJSON(ans_list):
         temp_imgGray = cv.GaussianBlur(item,(9,9),7)
         ret, threshold2 = cv.threshold(temp_imgGray,190,300,cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
-        print(value)
-
         if value < 800:
             if (idx+1)%4 == 1:
                 tempAns= "A"
@@ -63,13 +60,11 @@ def ExportJSON(ans_list):
             if (idx+1)%4 == 0:
                 tempAns= "D"
                 checker += 1
-
         if (idx+1)%4==0:
             if checker ==0:
                 tempAns="O"
             elif checker >1:
                 tempAns = "X"
-
             AnsDict[counter] = tempAns
             tempAns=""
             counter += 1
@@ -84,17 +79,20 @@ def IDListProcess(id_block,col_num):
         for y in range(10):
             temp_h = h//10
             id_list.append(id_block[temp_h * y: temp_h * (y + 1),temp_w*i:temp_w*(i+1)])
-
     return id_list
 def IDJson(id_list):
     Id = ""
     checker=0
     for idx, item in enumerate(id_list):
-        temp_imgGray = cv.GaussianBlur(item, (9, 9), 7)
+        y,x = item.shape
+        img_copy = item[5:y-5,5:x-5]
+        temp_imgGray = cv.GaussianBlur(img_copy , (9, 9), 7)
         ret, threshold2 = cv.threshold(temp_imgGray, 190, 300, cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
+        cv2.imshow("cv2",img_copy)
         print(value)
-        if value < 700:
+        cv2.waitKey()
+        if value < 250:
             for i in range(9,0,-1):
                 if (idx+1)%10==i:
                     if checker == 0:
@@ -105,7 +103,7 @@ def IDJson(id_list):
                     elif checker == 1 and len(Id)==1:
                         Id="X"
         if (idx + 1) % 10 == 0:
-            if value <650:
+            if value <250:
                 Id = Id + str(9)
                 checker+=1
             if checker == 0:

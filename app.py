@@ -19,11 +19,10 @@ def GetURL(methods = ['GET','POST']):
         base64_modify = ""
         json_income = request.data
         json_modify = json.loads(json_income)
-        for json_element in json_modify['Base64']:
-            base64_modify = json_element['varBase64']
+        base64_modify = json_modify["string"]
         im = Image.open(BytesIO(base64.b64decode(base64_modify)))
-        im.save("test1.jpg")
-        AnsJSON = GetPoint("test1.jpg")
+        im.save("test.jpg")
+        AnsJSON = GetPoint("test.jpg")
         IdJson = GetID("test.jpg")
         IdJson["Answer"] = AnsJSON
     except cv2.error as e:
