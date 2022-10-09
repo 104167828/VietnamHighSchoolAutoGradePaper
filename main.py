@@ -39,13 +39,14 @@ def GetID(img):
         image_read = cv2.rotate(image_read, cv2.ROTATE_90_COUNTERCLOCKWISE)
     img_resize = cv2.resize(image_read, (1102, 1560))
     image = cv2.cvtColor(img_resize, cv2.COLOR_BGR2GRAY)
-    img_croptop = image[0:image.shape[0] // 3, 0:image.shape[1]]
+    img_croptop = image[0:image.shape[0] // 3, image.shape[1]//2:image.shape[1]]
     threshold = cv2.threshold(img_croptop, 200, 255, cv2.THRESH_BINARY)[1]
     img2, contours, hierarchy = cv2.findContours(threshold, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
-    cts = contours[3],contours[5]
-    # cv2.drawContours(img_croptop, cts, -1, (0, 0, 255), 5)
-
+    cts = contours[1],contours[2]
+    cv2.drawContours(img_croptop, cts, -1, (0, 0, 255), 5)
+    #cv2.imshow("123",img_croptop)
+    #cv2.waitKey()
     IDBlock = pros.TransContour(img_croptop,cts,2)
 
     IDList = pros.IDListProcess(IDBlock[0],6)
