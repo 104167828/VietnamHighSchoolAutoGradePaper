@@ -8,7 +8,7 @@ def GetPoint(img):
     image_read = cv2.imread("test.jpg")
     if image_read.shape[0]< image_read.shape[1]:
         image_read = cv2.rotate(image_read,cv2.ROTATE_90_COUNTERCLOCKWISE)
-    img_resize = cv2.resize(image_read, (1102, 1560))
+    img_resize = cv2.resize(image_read, (991, 1404))
     image = cv2.cvtColor(img_resize, cv2.COLOR_BGR2GRAY)
     img_cropped = image[image.shape[0] // 4:image.shape[0], 0:image.shape[1]]
     threshold = cv2.threshold(img_cropped, 200, 255, cv2.THRESH_BINARY)[1]
@@ -45,16 +45,19 @@ def GetID(img):
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
     cts = contours[1],contours[2]
     cv2.drawContours(img_croptop, cts, -1, (0, 0, 255), 5)
-    #cv2.imshow("123",img_croptop)
-    #cv2.waitKey()
+    cv2.imshow("123",img_croptop)
+    cv2.waitKey()
     IDBlock = pros.TransContour(img_croptop,cts,2)
 
     IDList = pros.IDListProcess(IDBlock[0],6)
     TestIDList = pros.IDListProcess(IDBlock[1],3)
 
-    StudentID = pros.IDJson(IDList)
-    TestID = pros.IDJson(TestIDList)
+    StudentID,errorcode1 = pros.IDJson(IDList)
+    TestID,errorcode2 = pros.IDJson(TestIDList)
     result={}
     result["StudentID"]=StudentID
     result["TestID"]=TestID
+    if errorcode1 == True or errorcode2 == True:
+        result["Error"] = "True"
+    else: result["Error"] = "False"
     return result

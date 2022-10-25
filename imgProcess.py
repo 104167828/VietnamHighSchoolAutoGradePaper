@@ -81,6 +81,7 @@ def IDListProcess(id_block,col_num):
             id_list.append(id_block[temp_h * y: temp_h * (y + 1),temp_w*i:temp_w*(i+1)])
     return id_list
 def IDJson(id_list):
+    errorcode = False
     Id = ""
     checker=0
     for idx, item in enumerate(id_list):
@@ -89,9 +90,6 @@ def IDJson(id_list):
         temp_imgGray = cv.GaussianBlur(img_copy , (9, 9), 7)
         ret, threshold2 = cv.threshold(temp_imgGray, 190, 300, cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
-        cv2.imshow("cv2",img_copy)
-        print(value)
-        cv2.waitKey()
         if value < 250:
             for i in range(9,0,-1):
                 if (idx+1)%10==i:
@@ -100,15 +98,18 @@ def IDJson(id_list):
                         checker += 1
                     elif checker == 1 and len(Id)>1:
                         Id = Id[:len(Id)-1]+"X"
+                        errorcode = True
                     elif checker == 1 and len(Id)==1:
                         Id="X"
+                        errorcode = True
         if (idx + 1) % 10 == 0:
             if value <250:
                 Id = Id + str(9)
                 checker+=1
             if checker == 0:
                 Id = Id + "Y"
+                errorcode = True
             checker = 0
             print("-----------------------------")
-    return Id
+    return Id,errorcode
 
