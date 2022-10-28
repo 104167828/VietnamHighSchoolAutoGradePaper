@@ -16,6 +16,7 @@ def AnsBoxProcess(ans_block):
             (h, w) = block.shape
             temp_h = h//6
             ans_box.append(block[temp_h*i:temp_h*(i+1),0:w])
+        cv.imshow("1111",block)
     return ans_box
 def AnsCellProcess(ans_box):
     ans_cell = []
@@ -47,7 +48,11 @@ def ExportJSON(ans_list):
         temp_imgGray = cv.GaussianBlur(item,(9,9),7)
         ret, threshold2 = cv.threshold(temp_imgGray,190,300,cv.THRESH_BINARY)
         value = cv.countNonZero(threshold2)
-        if value < 800:
+        cv.imshow("X",threshold2)
+        print(value)
+        print(counter)
+        print("--------------------------------------")
+        if value < 600:
             if (idx+1)%4 == 1:
                 tempAns= "A"
                 checker += 1
