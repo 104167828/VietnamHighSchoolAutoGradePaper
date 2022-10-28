@@ -18,6 +18,7 @@ def GetPoint(img):
     contours = sorted(contours, key=cv2.contourArea, reverse=True)
     cts = contours[1:5]
 
+
     cv2.drawContours(img_cropped, cts, -1, (0, 0, 255), 5)
     cv2.imshow("11211", img_cropped)
     for i in range(4):
